@@ -10,6 +10,7 @@ const TESTED: &str = "#[tested]";
 const UNTESTED: &str = "#[untested]";
 const PARENT_TESTED: &str = "#[parent_tested]";
 const TRIVIAL: &str = "#[trivial]";
+const TRIVIAL_TESTED: &str = "#[trivial_tested]";
 const NOT_A_FN: &str = "#[not_a_fn]";
 
 fn main() {
@@ -60,6 +61,8 @@ fn format_label(label: &String) -> String {
 		UNTESTED.red()
 	} else if label.contains(TRIVIAL) {
 		TRIVIAL.blue()
+	} else if label.contains(TRIVIAL_TESTED) {
+		TRIVIAL_TESTED.blue()
 	} else if label.contains(NOT_A_FN) {
 		NOT_A_FN.purple()
 	} else {
@@ -144,6 +147,11 @@ fn contains_valid_label(
 	} else if string.contains(TRIVIAL) {
 		label_count
 			.entry(TRIVIAL.to_string())
+			.and_modify(|x| *x += 1)
+			.or_insert(1);
+	} else if string.contains(TRIVIAL_TESTED) {
+		label_count
+			.entry(TRIVIAL_TESTED.to_string())
 			.and_modify(|x| *x += 1)
 			.or_insert(1);
 	} else if string.contains(NOT_A_FN) {
